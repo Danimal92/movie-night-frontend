@@ -3,8 +3,14 @@ import MoviePage from './MoviePage'
 
 export class RecRow extends Component {
 
-
     
+    
+    
+
+  componentDidMount = () => {
+
+  }
+
 
 
     render() {
@@ -18,3 +24,5 @@ export class RecRow extends Component {
 }
 
 export default RecRow
+
+

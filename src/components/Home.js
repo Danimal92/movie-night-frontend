@@ -4,11 +4,18 @@ import RecRow from './RecRow'
 import MyMovies from './MyMovies'
 
 export class Home extends Component {
+    
+    state = {
+        recommendations: []
+    }
 
  
     
 
 
+    componentDidMount = () => {
+        
+    }
 
    
 
@@ -21,7 +28,7 @@ export class Home extends Component {
         return (
             <div>
                 <h1>Welcome, User!</h1>
-                <RecRow likedMovies = {this.props.likedMovies} />
+                <RecRow recMovies = {this.state.recommendations} />
                 <Link to={`/my_movies/`}>My Movies</Link>
                 {/* Search bar */}
                 {/* Friend's List  */}

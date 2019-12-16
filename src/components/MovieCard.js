@@ -15,6 +15,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -62,8 +63,8 @@ export function MovieCard(props) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={title}
-        subheader={`Director: ${director} ` }
+    title={<Link to={`/my_movies/${imdbID}`}>{title}</Link>}
+        subheader={director}
         subheader={actors}
       />
       <CardMedia
@@ -77,8 +78,8 @@ export function MovieCard(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+        <IconButton  aria-label="add to favorites">
+          <FavoriteIcon  />
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon />
@@ -96,7 +97,7 @@ export function MovieCard(props) {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph>Method:</Typography>
+          <Typography paragraph>Info:</Typography>
           <Typography paragraph>
             Released: {released}<br/>
             Runtime: {runtime}<br/>

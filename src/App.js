@@ -12,7 +12,8 @@ export class App extends React.Component {
 
   state = {
     user: '',
-    movies: []
+    movies: [],
+    recommendations: []
   }
 
   getLikedMovies = (num) => {
@@ -22,8 +23,11 @@ export class App extends React.Component {
       
       this.setState({
           movies: user.movies
-      })
+      }), this.getRecommendations()
       ))
+      
+
+      
 }
 
 createMovieRoutes = () => (
@@ -35,6 +39,38 @@ createMovieRoutes = () => (
 
 componentDidMount = () => {
   this.getLikedMovies()
+  // this.setRecommendations()
+}
+
+getRecommendations = () => {
+  console.log("running getRecommendations")
+  console.log('likedmovies prop', this.state.movies)
+  this.state.movies.map((movie) => (
+      console.log("inside the mapping"),
+      fetch(`http://localhost:3000/get_similar_movies`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "Application/json",
+    Accept: "Application/json"
+  },
+  body: JSON.stringify({
+    id: movie.id
+  })
+  }
+  )
+  .then(data => data.json())
+  .then(movies => this.setRecommendations(movies) )
+  ))
+}
+
+setRecommendations = (movies) => {
+  movies.forEach(element => {
+      this.setState({
+          recommendations: [...this.state.recommendations, element]
+      })
+  });
+
+  console.log('recommendations: ', this.state.recommendations)
 }
 
 
@@ -44,7 +80,7 @@ componentDidMount = () => {
 
 render() {
 return (
-    <div>
+    <div >
      <Router>
        {console.log('movies from state: ',this.state.movies )}
      
