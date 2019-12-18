@@ -7,7 +7,7 @@ import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import {Link} from 'react-router-dom'
+import {NavLink,Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1,
+    flexGrow: 0,
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
-    marginRight: '44%',
-    marginLeft: 0,
+    
+    marginLeft: 400,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(1),
@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
   },
   inputRoot: {
     color: 'inherit',
+    
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 7),
@@ -70,18 +71,21 @@ export function SearchBar() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Link
-            style={{  fontSize: '28px'  }}
-            to={'/'}
-            edge="start"
-            className={classes.title}
-            color="inherit"
-            aria-label="open drawer"
-          >Home</Link>
-          <Typography className={classes.title} variant="h6" noWrap>
-             
-          </Typography>
-          <div  className={classes.search}>
+        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <NavLink activeStyle={{
+    fontWeight: "bold",
+    color: "red"
+  }} exact to={'/'} >Home</NavLink>
+          </IconButton>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <NavLink activeStyle={{
+    fontWeight: "bold",
+    color: "red"
+  }} exact to={'/my_movies'} >My Movies</NavLink>
+          </IconButton>
+          
+          
+          <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>

@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import MoviePage from './MoviePage'
-import {Link} from 'react-router-dom'
+import {Link,NavLink} from 'react-router-dom'
 import MovieCard from './MovieCard'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { lightBlue } from '@material-ui/core/colors';
 import SearchBar from './SearchBar'
+import 'typeface-roboto'
+import Typography from '@material-ui/core/Typography';
+
+
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   paper: {
     padding: theme.spacing(2),
@@ -18,25 +22,28 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export class MyMovies extends Component {
 
+
+export class MyMovies extends Component {
+    
 
     createMovieLinks = () => (
         console.log('creating movie links'),
         this.props.likedMovies.map((movie) => (
         console.log('movie: ', movie ),
-        <Grid item xs={3}><MovieCard to={`/my_movies/${movie.imdbID}`} movie={movie} /></Grid>
+        <Grid item xs={3}><MovieCard  to={`/my_movies/${movie.imdbID}`} likeMovie={this.props.likeMovie} dislikeMovie={this.props.dislikeMovie} movie={movie} /></Grid>
         ))
     )
 
 
     render() {
+      
         return (
             
             <div>
-                <h1 style={{textAlign: 'center'}}>My Movies</h1>
-                <SearchBar /><br/>
-                <Grid container spacing={3}>
+                
+                <SearchBar className={useStyles.root} /><br/>
+                <Grid container spacing={2}>
                 
                 {this.createMovieLinks()}
                 </Grid>

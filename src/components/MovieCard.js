@@ -15,11 +15,16 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {Link} from 'react-router-dom'
+import {Link,NavLink} from 'react-router-dom'
+import noImage from '/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/harold.jpg'
+import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
+import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
+import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 345,
+    backgroundColor:'#ffeae8',
+    maxWidth: 500,
   },
   media: {
     height: 0,
@@ -48,6 +53,12 @@ export function MovieCard(props) {
     setExpanded(!expanded);
   };
 
+  
+
+  const dislikeMovieHelper = () => {
+    props.dislikeMovie(props.movie)
+  }
+
   const {title, year, rated, released, runtime, genre, director, writer, actors, plot, language, country, awards, poster, imdbRating, imdbID, boxOffice} = props.movie
 
   return (
@@ -58,31 +69,28 @@ export function MovieCard(props) {
         //     R
         //   </Avatar>
         // }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
+        // action={
+        //   <IconButton aria-label="settings">
+        //     <MoreVertIcon />
+        //   </IconButton>
+        // }
     title={<Link to={`/my_movies/${imdbID}`}>{title}</Link>}
-        subheader={director}
-        subheader={actors}
+        
       />
       <CardMedia
         className={classes.media}
-        image={poster}
+        image={poster === 'N/A' ? noImage : poster}
         
       />
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-            {plot}
+        <Typography noWrap={true} variant="body2" color="textSecondary" component="p">
+            {plot ==='N/A' ? 'This resource has not been provided with a plot ':plot}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton  aria-label="add to favorites">
-          <FavoriteIcon  />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
+        
+        <IconButton onClick={dislikeMovieHelper} aria-label="share">
+          <ThumbDownAltOutlinedIcon />
         </IconButton>
         <IconButton
           className={clsx(classes.expand, {
