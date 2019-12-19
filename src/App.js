@@ -57,18 +57,18 @@ export class App extends React.Component {
     // this.setRecommendations()
   };
 
-  makeMovie = movie => {
-    fetch(`http://localhost:3000/movies`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-        Accept: "Application/json"
-      },
-      body: JSON.stringify({
-        movie: movie
-      })
-    });
-  };
+  // makeMovie = movie => {
+  //   fetch(`http://localhost:3000/movies`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "Application/json",
+  //       Accept: "Application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       movie: movie
+  //     })
+  //   });
+  // };
 
   getRecommendations = () => {
     console.log("running getRecommendations");
@@ -226,6 +226,7 @@ export class App extends React.Component {
             path="/my_movies/"
             render={props => (
               <MyMovies
+                createSearchRoute={this.createSearchRoute}
                 likedMovies={this.state.movies}
                 likeMovie={this.likeMovie}
                 dislikeMovie={this.dislikeMovie}

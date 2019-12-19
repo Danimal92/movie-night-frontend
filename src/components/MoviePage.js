@@ -40,7 +40,9 @@ export function MoviePage(props) {
     )
       .then(data => data.json())
       .then(data => {
-        makeMovie(data)
+        
+        makeMovie(displayMovie)
+        
         
         console.log(data);
         updateDisplayMovie(data);
@@ -49,7 +51,7 @@ export function MoviePage(props) {
   }
   
   const makeMovie = (movie) => {
-    console.log()
+    console.log('HITTING THE MAKE MOVIE')
     fetch(`http://localhost:3000/movies`, {
       method: "POST",
       headers: {
@@ -57,7 +59,7 @@ export function MoviePage(props) {
         Accept: "Application/json"
       },
       body: JSON.stringify({
-        movie: {
+        
           title: movie.Title ,
           year: movie.Year ,
           rated: movie.Rated ,
@@ -74,8 +76,8 @@ export function MoviePage(props) {
           poster: movie.Poster ,
           imdbRating: movie.imdbRating ,
           imdbID: movie.imdbID ,
-          boxoffice: movie.boxoffice
-        }
+          boxoffice: movie.BoxOffice
+        
       })
     })
   }
@@ -103,18 +105,57 @@ export function MoviePage(props) {
     BoxOffice
   } = displayMovie;
 
-  const findMovie = (movie) => {
-    fetch('http://localhost:3000/movies') 
-  }
+  // const findMovie = () => {
+   
+  //  fetch(`http://localhost:3000/find_by_imdbID`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "Application/json",
+  //       Accept: "Application/json"
+  //     },
+  //     body: JSON.stringify({
+        
+        
+  //       imdbID: displayMovie.imdbID
+
+  //     })
+  //   }).then(data => data.json())
+  //   .then(movie =>  movie)
+  //   // .then(movie => movie)
+  // }
+  
 
 
 
   const likeMovieHelper = () => {
-    console.log('likemoviehelper hit ',displayMovie)
-    props.likeMovie(displayMovie);
+    
+    makeMovie(displayMovie)
+    fetch(`http://localhost:3000/find_by_imdbID`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+        Accept: "Application/json"
+      },
+      body: JSON.stringify({
+        imdbID: displayMovie.imdbID
+      })
+    }).then(data => data.json())
+      .then(movie =>  props.likeMovie(movie))
   };
+
+
   const dislikeMovieHelper = () => {
-    props.dislikeMovie(displayMovie);
+    fetch(`http://localhost:3000/find_by_imdbID`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+        Accept: "Application/json"
+      },
+      body: JSON.stringify({
+        imdbID: displayMovie.imdbID
+      })
+    }).then(data => data.json())
+      .then(movie =>  props.dislikeMovie(movie))
   };
 
   return (

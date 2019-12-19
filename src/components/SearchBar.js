@@ -8,6 +8,7 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import {NavLink,Link} from 'react-router-dom'
+import MovieSearch from './MovieSearch';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,7 +65,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export function SearchBar() {
+export function SearchBar(props) {
   const classes = useStyles();
 
   return (
@@ -85,19 +86,10 @@ export function SearchBar() {
           </IconButton>
           
           
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
+          
+            
+            <MovieSearch createSearchRoute={props.createSearchRoute} />
+          
         </Toolbar>
       </AppBar>
     </div>

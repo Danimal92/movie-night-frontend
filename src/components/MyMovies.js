@@ -42,7 +42,7 @@ export class MyMovies extends Component {
             
             <div>
                 
-                <SearchBar className={useStyles.root} /><br/>
+                <SearchBar createSearchRoute={this.props.createSearchRoute} className={useStyles.root} /><br/>
                 <Grid container spacing={2}>
                 
                 {this.createMovieLinks()}
