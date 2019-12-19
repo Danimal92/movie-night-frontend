@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -30,44 +30,96 @@ const useStyles = makeStyles(theme => ({
 
 export function MoviePage(props) {
   const classes = useStyles();
+  
+  const [displayMovie, updateDisplayMovie] = useState(0)
+  const [fetchAgain = true, stopFetch] = useState(1)
 
-  console.log("%cPROPS TO MOVIE  PAGE", "color:green;");
-  console.dir(props);
-  if (props.match.params.imdbId != props.movie.imdbID) {
-    //   props.onSearchMovie(props.match.params.imdbId);
+  if (props.movie.Title === "Loading..." &&  fetchAgain) {
+    fetch(
+      `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}`
+    )
+      .then(data => data.json())
+      .then(data => {
+        makeMovie(data)
+        
+        console.log(data);
+        updateDisplayMovie(data);
+        stopFetch(false)
+      });
+  }
+  
+  const makeMovie = (movie) => {
+    console.log()
+    fetch(`http://localhost:3000/movies`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "Application/json",
+        Accept: "Application/json"
+      },
+      body: JSON.stringify({
+        movie: {
+          title: movie.Title ,
+          year: movie.Year ,
+          rated: movie.Rated ,
+          released: movie.Released ,
+          runtime: movie.Runtime ,
+          genre: movie.Genre ,
+          director: movie.Director ,
+          writer:  movie.Writer,
+          actors: movie.Actors ,
+          plot: movie.Plot ,
+          language: movie.Language ,
+          country: movie.Country ,
+          awards: movie.Awards ,
+          poster: movie.Poster ,
+          imdbRating: movie.imdbRating ,
+          imdbID: movie.imdbID ,
+          boxoffice: movie.boxoffice
+        }
+      })
+    })
   }
 
-  console.log(props.movie);
-  const {
-    title,
-    year,
-    rated,
-    released,
-    runtime,
-    genre,
-    director,
-    writer,
-    actors,
-    plot,
-    language,
-    country,
-    awards,
-    poster,
+  console.log("!!!!!!!",displayMovie);
+
+
+  let {
+    Title,
+    Year,
+    Rated,
+    Released,
+    Runtime,
+    Genre,
+    Director,
+    Writer,
+    Actors,
+    Plot,
+    Language,
+    Country,
+    Awards,
+    Poster,
     imdbRating,
     imdbID,
-    boxoffice
-  } = props.movie;
+    BoxOffice
+  } = displayMovie;
+
+  const findMovie = (movie) => {
+    fetch('http://localhost:3000/movies') 
+  }
+
+
 
   const likeMovieHelper = () => {
-    props.likeMovie(props.movie);
+    console.log('likemoviehelper hit ',displayMovie)
+    props.likeMovie(displayMovie);
   };
   const dislikeMovieHelper = () => {
-    props.dislikeMovie(props.movie);
+    props.dislikeMovie(displayMovie);
   };
 
   return (
     <div className={classes.root}>
-      <AppyBar style={{}} movie={props.movie} />
+      <AppyBar style={{}} movie={displayMovie} />
 
       <Grid container spacing={0}>
         <Grid style={{ color: "#a84a32" }} item xs={12}></Grid>
@@ -84,17 +136,17 @@ export function MoviePage(props) {
               textAlign: "center"
             }}
           >
-            {title}
-            {`(${year})`}
+            {Title}
+            {`(${Year})`}
           </Typography>
           <Image
-            src={poster === "N/A" ? Harold : poster}
+            src={Poster === "N/A" ? Harold : Poster}
             animationDuration={3000}
             aspectRatio={2 / 3}
           />
           <Paper className={classes.paper}>
-            Rating: {rated} | Runtime: {runtime} | Genre: {genre} | Released:{" "}
-            {released} | Language: {language}
+            Rating: {Rated} | Runtime: {Runtime} | Genre: {Genre} | Released:{" "}
+            {Released} | Language: {Language}
           </Paper>
         </Grid>
         <Grid item xs={7}>
@@ -102,19 +154,19 @@ export function MoviePage(props) {
             style={{ fontSize: "22px", fontWeight: "bold" }}
             className={classes.paper}
           >
-            Director: {director} | Writer(s): {writer} | Cast: {actors}
+            Director: {Director} | Writer(s): {Writer} | Cast: {Actors}
           </Paper>
           <br />
           <Paper
             style={{ color: "#000000", fontSize: "22px", fontWeight: "bolder" }}
             className={classes.paper}
           >
-            Plot: {plot}
+            Plot: {Plot}
           </Paper>
           <br />
           <Paper className={classes.paper}>
-            Country: {country} | Awards: {awards} | imdbRating: {imdbRating} |
-            Box Office: {boxoffice}
+            Country: {Country} | Awards: {Awards} | imdbRating: {imdbRating} |
+            Box Office: {BoxOffice}
           </Paper>
           <br />
           <IconButton onClick={likeMovieHelper}>
@@ -130,7 +182,24 @@ export function MoviePage(props) {
 }
 export default MoviePage;
 
-
 MoviePage.defaultProps = {
-    onSearchMovie: id => console.log 
-}
+  movie: {
+    Title: "Loading...",
+    Year: "Loading...",
+    Rated: "Loading...",
+    Released: "Loading...",
+    Runtime: "Loading...",
+    Genre: "Loading...",
+    Director: "Loading...",
+    Writer: "Loading...",
+    Actors: "Loading...",
+    Plot: "Loading...",
+    Language: "Loading...",
+    Country: "Loading...",
+    Awards: "Loading...",
+    Poster: "Loading...",
+    imdbRating: "Loading...",
+    imdbID: "Loading...",
+    BoxOffice: "Loading..."
+  }
+};

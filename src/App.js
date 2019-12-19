@@ -35,22 +35,22 @@ export class App extends React.Component {
     console.log("Ran get movies");
   };
 
-  createMovieRoutes = () =>
-    this.state.movies.map(movie => (
-      <Route
-        exact
-        path={`/my_movies/${movie.imdbID}`}
-        render={props => (
-          <MoviePage
-            key={movie.imdbID}
-            movie={movie}
-            likeMovie={this.likeMovie}
-            dislikeMovie={this.dislikeMovie}
-            {...props}
-          />
-        )}
-      />
-    ));
+  // createMovieRoutes = () =>
+  //   this.state.movies.map(movie => (
+  //     <Route
+  //       exact
+  //       path={`/my_movies/:imdbId`}
+  //       render={props => (
+  //         <MoviePage
+  //           key={movie.imdbID}
+  //           movie={movie}
+  //           likeMovie={this.likeMovie}
+  //           dislikeMovie={this.dislikeMovie}
+  //           {...props}
+  //         />
+  //       )}
+  //     />
+  //   ));
 
   componentDidMount = () => {
     this.getLikedMovies();
@@ -92,7 +92,12 @@ export class App extends React.Component {
     );
   };
 
+  
+
   likeMovie = movie => {
+    console.log("THIS IS THE MOVIE YOU NEEEEEED:",movie)
+   
+    
     fetch(`http://localhost:3000/usermovies`, {
       method: "POST",
       headers: {
@@ -108,7 +113,7 @@ export class App extends React.Component {
       })
     })
       .then(() => this.getLikedMovies())
-      .then(() => this.makeMovie(movie));
+      
 
     // this.getLikedMovies()
   };
@@ -143,21 +148,21 @@ export class App extends React.Component {
     return _.uniqBy(array, "imdbID");
   };
 
-  createRecRoutes = () =>
-    this.state.recommendations.map(movie => (
-      <Route
-        exact
-        path={`/recommendations/${movie.imdbID}`}
-        render={props => (
-          <MoviePage
-            movie={movie}
-            likeMovie={this.likeMovie}
-            dislikeMovie={this.dislikeMovie}
-            {...props}
-          />
-        )}
-      />
-    ));
+  // createRecRoutes = () =>
+  //   this.state.recommendations.map(movie => (
+  //     <Route
+  //       exact
+  //       path={`/recommendations/${movie.imdbID}`}
+  //       render={props => (
+  //         <MoviePage
+  //           movie={movie}
+  //           likeMovie={this.likeMovie}
+  //           dislikeMovie={this.dislikeMovie}
+  //           {...props}
+  //         />
+  //       )}
+  //     />
+  //   ));
 
   createSearchRoute = imdbID => {
     console.log("hitting fetch");
@@ -179,28 +184,23 @@ export class App extends React.Component {
       "showing state of searched movie again",
       this.state.searchMovie.length
     );
-    this.redirectFunc(movie);
-    return (
-      <Route
-        path={`/search/${movie.imdbID}`}
-        render={props => (
-          <MoviePage
-            movie={movie}
-            likeMovie={this.likeMovie}
-            dislikeMovie={this.dislikeMovie}
-            {...props}
-          />
-        )}
-      />
-    );
+    return <Redirect to={`/search/${movie.imdbID}`}/>
+    // return (
+    //   <Route
+    //     path={`/search/${movie.imdbID}`}
+    //     render={props => (
+    //       <MoviePage
+    //         movie={movie }
+    //         likeMovie={this.likeMovie}
+    //         dislikeMovie={this.dislikeMovie}
+    //         {...props}
+    //       />
+    //     )}
+    //   />
+    // );
   };
 
-  redirectFunc = movie => {
-    setTimeout(() => {
-      console.log("redirecting to :", movie);
-      return <Redirect to={`/search/${movie.imdbID}`} />;
-    }, 2000);
-  };
+  
 
   render() {
     return (
@@ -223,7 +223,7 @@ export class App extends React.Component {
           />
           <Route
             exact
-            path="/my_movies"
+            path="/my_movies/"
             render={props => (
               <MyMovies
                 likedMovies={this.state.movies}
@@ -233,20 +233,44 @@ export class App extends React.Component {
               />
             )}
           />
-          {this.createMovieRoutes()}
-          {this.createRecRoutes()}
+          {/* {this.createMovieRoutes()} */}
+          {/* {this.createRecRoutes()} */}
           {this.state.search ? this.createRoute() : ""}
           <Route
             path="/search/:imdbId"
             render={props => (
               <MoviePage
                 {...props}
-                onSearchMovie={this.createSearchRoute}
-                movie={this.state.searchMovie}
+                likeMovie={this.likeMovie}
+                dislikeMovie={this.dislikeMovie}
               />
             )}
           />
+          <Route
+        
+        path={`/my_movies/:imdbId`}
+        render={props => (
+          <MoviePage
+            
+            likeMovie={this.likeMovie}
+            dislikeMovie={this.dislikeMovie}
+            {...props}
+          />)}/>
+          <Route
+        exact
+        path={`/recommendations/:imdbId`}
+        render={props => (
+          <MoviePage
+            likeMovie={this.likeMovie}
+            dislikeMovie={this.dislikeMovie}
+            {...props}
+          />
+        )}
+      />
+
+
         </Router>
+        
       </div>
     );
   }
