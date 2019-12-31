@@ -18,21 +18,27 @@ export class App extends React.Component {
     movies: [],
     recommendations: [],
     searchMovie: [],
-    search: false
+    search: false,
+    loggedIn: false
   };
 
-  getLikedMovies = num => {
-    fetch(`http://localhost:3000/users/${1}`)
+  getLikedMovies = token => {
+    fetch(`http://localhost:3000/api/v1/profile`,{
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }})
       .then(response => response.json())
       .then(
         user => (
+          console.log("GET LIKED MOVIE USER",user),
           this.setState({
-            movies: user.movies
+            movies: user.user.movies
           }),
           this.getRecommendations()
         )
       );
-    console.log("Ran get movies");
+    
   };
 
   // createMovieRoutes = () =>
@@ -53,7 +59,7 @@ export class App extends React.Component {
   //   ));
 
   componentDidMount = () => {
-    this.getLikedMovies();
+    // this.getLikedMovies();
     // this.setRecommendations()
   };
 
@@ -71,16 +77,17 @@ export class App extends React.Component {
   // };
 
   getRecommendations = () => {
-    console.log("running getRecommendations");
-    console.log("likedmovies prop", this.state.movies);
-    this.state.movies.map(
+    
+    
+    if(this.state.movies){this.state.movies.map(
       movie => (
-        console.log("inside the mapping"),
+        
         fetch(`http://localhost:3000/get_similar_movies`, {
           method: "POST",
           headers: {
             "Content-Type": "Application/json",
-            Accept: "Application/json"
+            Accept: "Application/json",
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           },
           body: JSON.stringify({
             id: movie.id
@@ -90,23 +97,26 @@ export class App extends React.Component {
           .then(movies => this.setRecommendations(movies))
       )
     );
+      }
   };
 
   
 
   likeMovie = movie => {
-    console.log("THIS IS THE MOVIE YOU NEEEEEED:",movie)
+    
    
     
     fetch(`http://localhost:3000/usermovies`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
-        Accept: "Application/json"
+        Accept: "Application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+
       },
       body: JSON.stringify({
         usermovie: {
-          user_id: 1,
+          user_id: this.state.user.id,
           movie_id: movie.id,
           liked: true
         }
@@ -123,10 +133,11 @@ export class App extends React.Component {
       method: "DELETE",
       headers: {
         "Content-Type": "Application/json",
-        Accept: "Application/json"
+        Accept: "Application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
-        user_id: 1,
+        user_id: this.state.user.id,
         movie_id: movie.id
       })
     }).then(() => this.getLikedMovies());
@@ -138,10 +149,10 @@ export class App extends React.Component {
       this.setState({
         recommendations: [...recs, element]
       });
-      console.log("set recs", this.state.recommendations);
+     
     });
 
-    console.log("recommendations: ", this.state.recommendations);
+   
   };
 
   sanitizeRecArray = array => {
@@ -165,25 +176,55 @@ export class App extends React.Component {
   //   ));
 
   createSearchRoute = imdbID => {
-    console.log("hitting fetch");
+    
     fetch(`http://www.omdbapi.com/?apikey=b345e258&i=${imdbID}`)
       .then(data => data.json())
       .then(movie => {
-        console.log("THIS IS THE FETCHED MOVIE", movie);
+        
         this.setState({ searchMovie: movie, search: true });
       });
-    console.log("state of search movie: ", this.state.searchMovie);
+    
   };
 
+  createUser = (username, password) => {
+    fetch('http://localhost:3000/api/v1/users', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  },
+  body: JSON.stringify({
+    user: {
+
+      username: username,
+      password: password,
+      
+    }
+  })
+})
+  .then(r => r.json())
+  .then(r => {
+    this.setState({ user: r.user });
+    localStorage.setItem('token', r.jwt);
+    if(this.state.user){
+      this.setState({
+        loggedIn: true,
+        user: r.user,
+        movies: r.user.movies
+      })
+      console.log('CURRENT STATE', this.state)
+      this.getRecommendations()
+    }
+  })
+  
+  }
+
   createRoute = () => {
-    console.log("hitting create route");
+    
     const movie = this.state.searchMovie;
     this.setState({ searchMovie: [], search: false });
 
-    console.log(
-      "showing state of searched movie again",
-      this.state.searchMovie.length
-    );
+    
     return <Redirect to={`/search/${movie.imdbID}`}/>
     // return (
     //   <Route
@@ -200,15 +241,74 @@ export class App extends React.Component {
     // );
   };
 
+  fetchToken = (username, password) => {
+    console.log('Hitting fetch token', username, password)
+    fetch('http://localhost:3000/api/v1/login', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json'
+  },
+  body: JSON.stringify({
+    
+      user : {
+        username: username,
+        password: password
+      }
+      
+    
+  })
+}).then(r => r.json())
+.then(r => {
+  this.setState({ user: r.user });
+  localStorage.setItem('token', r.jwt);
+  if(this.state.user){
+    this.setState({
+      loggedIn: true,
+      user: r.user,
+      movies: r.user.movies
+    })
+    console.log('CURRENT STATE', this.state)
+    this.getRecommendations()
+  }
+
+
+})
+console.log("This is inside the local storage", localStorage)
+  }
+
+  checkLoggedIn = () => {
+
+    if(this.state.loggedIn){
+      return <Redirect to={'/'} />
+    }
+    else{
+      return <Redirect to={'/signin'} />
+    }
+    
+  }
+
+  
+
   
 
   render() {
     return (
+      
       <div>
+        
         <Router>
+          {this.checkLoggedIn()}
           {console.log("movies from state: ", this.state.movies)}
 
-          <Route exact path="/signin" />
+          <Route exact path="/signin" render={props => (
+              <Signin
+                fetchToken={this.fetchToken}
+                createUser={this.createUser}
+                {...props}
+              />
+            )}
+          /> 
           <Route
             exact
             path="/"

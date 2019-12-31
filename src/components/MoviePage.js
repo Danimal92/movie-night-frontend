@@ -14,29 +14,31 @@ import IconButton from "@material-ui/core/IconButton";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    "& > *": {
-      margin: theme.spacing(1)
-    }
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "float-left",
-    color: theme.palette.text.secondary
-  }
-}));
+// const useStyles = makeStyles(theme => ({
+//   root: {
+//     flexGrow: 1,
+//     "& > *": {
+//       margin: theme.spacing(1)
+//     }
+//   },
+//   paper: {
+//     padding: theme.spacing(2),
+//     textAlign: "float-left",
+//     color: theme.palette.text.secondary
+//   }
+// }));
+
+
 
 export function MoviePage(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
   
   const [displayMovie, updateDisplayMovie] = useState(0)
   const [fetchAgain = true, stopFetch] = useState(1)
 
   if (props.movie.Title === "Loading..." &&  fetchAgain) {
     fetch(
-      `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}`
+      `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}&plot=full`
     )
       .then(data => data.json())
       .then(data => {
@@ -51,12 +53,17 @@ export function MoviePage(props) {
   }
   
   const makeMovie = (movie) => {
-    console.log('HITTING THE MAKE MOVIE')
+    
+
+    console.log('LOCAL STORAGE TOKEN', localStorage.getItem('token'))
+
+
     fetch(`http://localhost:3000/movies`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
-        Accept: "Application/json"
+        Accept: "Application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         
@@ -134,7 +141,8 @@ export function MoviePage(props) {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
-        Accept: "Application/json"
+        Accept: "Application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         imdbID: displayMovie.imdbID
@@ -149,7 +157,8 @@ export function MoviePage(props) {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
-        Accept: "Application/json"
+        Accept: "Application/json",
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify({
         imdbID: displayMovie.imdbID
@@ -159,7 +168,7 @@ export function MoviePage(props) {
   };
 
   return (
-    <div className={classes.root}>
+    <div >
       <AppyBar style={{}} movie={displayMovie} />
 
       <Grid container spacing={0}>
@@ -185,7 +194,7 @@ export function MoviePage(props) {
             animationDuration={3000}
             aspectRatio={2 / 3}
           />
-          <Paper className={classes.paper}>
+          <Paper >
             Rating: {Rated} | Runtime: {Runtime} | Genre: {Genre} | Released:{" "}
             {Released} | Language: {Language}
           </Paper>
@@ -193,19 +202,19 @@ export function MoviePage(props) {
         <Grid item xs={7}>
           <Paper
             style={{ fontSize: "22px", fontWeight: "bold" }}
-            className={classes.paper}
+            
           >
             Director: {Director} | Writer(s): {Writer} | Cast: {Actors}
           </Paper>
           <br />
           <Paper
             style={{ color: "#000000", fontSize: "22px", fontWeight: "bolder" }}
-            className={classes.paper}
+            
           >
             Plot: {Plot}
           </Paper>
           <br />
-          <Paper className={classes.paper}>
+          <Paper >
             Country: {Country} | Awards: {Awards} | imdbRating: {imdbRating} |
             Box Office: {BoxOffice}
           </Paper>

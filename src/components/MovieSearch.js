@@ -99,18 +99,18 @@ export class MovieSearch extends React.Component {
   };
 
   autocompleteSearch = q => {
-    console.log('FETCH FIRING', q)
+    
     fetch(`${API_URL}s=${q}&page=1&type=movie`)
           .then(( data ) => data.json())
           .then((data) => {
-            console.log("what is response!?",data.Response)
+            
             if(data.Response==='True'){
-            console.log("What is Search?!!",data.Search)
+           
             this.setState({
               results: data.Search
             })}}
           )
-    console.log("THE RESULTS: ", this.state.results)
+    
     this._fetch(this.state.results);
   };
 
@@ -122,8 +122,7 @@ export class MovieSearch extends React.Component {
 
   handleClick = (imdbID,e) => {
     e.preventDefault()
-    console.log("THE ID: ", imdbID)
-    console.log('THE EVENT:', e)
+    
     this.props.createSearchRoute(imdbID)
 
 
@@ -131,7 +130,7 @@ export class MovieSearch extends React.Component {
 
   render() {
     const _searches = this.state._searches || [];
-    console.log(_searches)
+    
     return (
       <div>
         
@@ -153,7 +152,7 @@ export class MovieSearch extends React.Component {
         <ul style={{listStyleType:'none'}}>
           {this.state.results.map((s) => {
             
-          return <Link to={`/search/${s.imdbID}`} onClick={(event) =>  this.handleClick(s.imdbID,event )} ><li style={{bottomMargin:'10px',color: '#000000',backgroundColor: '#ffcfcc'}}>{s.Title} ({s.Year})</li></Link>;
+          return <Link to={`/search/${s.imdbID}`} onClick={(event) =>  this.handleClick(s.imdbID,event )} ><li style={{color: '#000000',backgroundColor: '#ffcfcc'}}>{s.Title} ({s.Year})</li></Link>;
           })}
         </ul>
       </div>

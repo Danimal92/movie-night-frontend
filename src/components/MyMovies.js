@@ -26,13 +26,14 @@ const useStyles = makeStyles(theme => ({
 
 export class MyMovies extends Component {
     
-
+    
     createMovieLinks = () => (
-        console.log('creating movie links'),
+        
         this.props.likedMovies.map((movie) => (
-        console.log('movie: ', movie ),
+        
         <Grid item xs={3}><MovieCard  to={`/my_movies/${movie.imdbID}`} likeMovie={this.props.likeMovie} dislikeMovie={this.props.dislikeMovie} movie={movie} /></Grid>
         ))
+        
     )
 
 
