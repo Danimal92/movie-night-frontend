@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+// import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Image from "material-ui-image";
-import AppyBar from "./AppyBar";
 import Typography from "@material-ui/core/Typography";
 import Harold from "/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/harold.jpg";
 import ThumbDownAltOutlinedIcon from "@material-ui/icons/ThumbDownAltOutlined";
@@ -28,69 +27,63 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 //   }
 // }));
 
-
-
 export function MoviePage(props) {
   // const classes = useStyles();
-  
-  const [displayMovie, updateDisplayMovie] = useState(0)
-  const [fetchAgain = true, stopFetch] = useState(1)
 
-  if (props.movie.Title === "Loading..." &&  fetchAgain) {
+  const [displayMovie, updateDisplayMovie] = useState(0);
+  const [fetchAgain, stopFetch] = useState(true);
+
+  useEffect(() => {
+    console.log('loaded', fetchAgain)
+    return stopFetch(!fetchAgain)
+  }, [])
+
+  if (props.movie.Title === "Loading..." && fetchAgain) {
     fetch(
       `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}&plot=full`
     )
       .then(data => data.json())
       .then(data => {
-        
-        makeMovie(displayMovie)
-        
-        
+        makeMovie(displayMovie);
         console.log(data);
         updateDisplayMovie(data);
-        stopFetch(false)
+        stopFetch(false);
       });
   }
-  
-  const makeMovie = (movie) => {
-    
 
-    console.log('LOCAL STORAGE TOKEN', localStorage.getItem('token'))
-
+  const makeMovie = movie => {
+    console.log("LOCAL STORAGE TOKEN", localStorage.getItem("token"));
 
     fetch(`http://localhost:3000/movies`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
         Accept: "Application/json",
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({
-        
-          title: movie.Title ,
-          year: movie.Year ,
-          rated: movie.Rated ,
-          released: movie.Released ,
-          runtime: movie.Runtime ,
-          genre: movie.Genre ,
-          director: movie.Director ,
-          writer:  movie.Writer,
-          actors: movie.Actors ,
-          plot: movie.Plot ,
-          language: movie.Language ,
-          country: movie.Country ,
-          awards: movie.Awards ,
-          poster: movie.Poster ,
-          imdbRating: movie.imdbRating ,
-          imdbID: movie.imdbID ,
-          boxoffice: movie.BoxOffice
-        
+        title: movie.Title,
+        year: movie.Year,
+        rated: movie.Rated,
+        released: movie.Released,
+        runtime: movie.Runtime,
+        genre: movie.Genre,
+        director: movie.Director,
+        writer: movie.Writer,
+        actors: movie.Actors,
+        plot: movie.Plot,
+        language: movie.Language,
+        country: movie.Country,
+        awards: movie.Awards,
+        poster: movie.Poster,
+        imdbRating: movie.imdbRating,
+        imdbID: movie.imdbID,
+        boxoffice: movie.BoxOffice
       })
-    })
-  }
+    });
+  };
 
-  console.log("!!!!!!!",displayMovie);
-
+  console.log("!!!!!!!", displayMovie);
 
   let {
     Title,
@@ -113,7 +106,7 @@ export function MoviePage(props) {
   } = displayMovie;
 
   // const findMovie = () => {
-   
+
   //  fetch(`http://localhost:3000/find_by_imdbID`, {
   //     method: "POST",
   //     headers: {
@@ -121,8 +114,7 @@ export function MoviePage(props) {
   //       Accept: "Application/json"
   //     },
   //     body: JSON.stringify({
-        
-        
+
   //       imdbID: displayMovie.imdbID
 
   //     })
@@ -130,27 +122,29 @@ export function MoviePage(props) {
   //   .then(movie =>  movie)
   //   // .then(movie => movie)
   // }
+
+  let movieObject = {}
   
 
-
-
   const likeMovieHelper = () => {
-    
-    makeMovie(displayMovie)
+    makeMovie(displayMovie);
     fetch(`http://localhost:3000/find_by_imdbID`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
         Accept: "Application/json",
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({
         imdbID: displayMovie.imdbID
       })
-    }).then(data => data.json())
-      .then(movie =>  props.likeMovie(movie))
+    })
+      .then(data => data.json())
+      .then(movie => (
+        props.likeMovie(movie),
+        movieObject = movie
+      ));
   };
-
 
   const dislikeMovieHelper = () => {
     fetch(`http://localhost:3000/find_by_imdbID`, {
@@ -158,18 +152,19 @@ export function MoviePage(props) {
       headers: {
         "Content-Type": "Application/json",
         Accept: "Application/json",
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${localStorage.getItem("token")}`
       },
       body: JSON.stringify({
         imdbID: displayMovie.imdbID
       })
-    }).then(data => data.json())
-      .then(movie =>  props.dislikeMovie(movie))
+    })
+      .then(data => data.json())
+      .then(movie => props.dislikeMovie(movie));
   };
 
   return (
-    <div >
-      <AppyBar style={{}} movie={displayMovie} />
+    <div>
+      
 
       <Grid container spacing={0}>
         <Grid style={{ color: "#a84a32" }} item xs={12}></Grid>
@@ -181,7 +176,7 @@ export function MoviePage(props) {
             style={{
               fontWeight: "bolder",
               fontFamily: "roboto",
-              backgroundColor: "#f7d0f7",
+              backgroundColor: "#3283CF",
               fontSize: "2em",
               textAlign: "center"
             }}
@@ -194,39 +189,36 @@ export function MoviePage(props) {
             animationDuration={3000}
             aspectRatio={2 / 3}
           />
-          <Paper >
+          <Paper>
             Rating: {Rated} | Runtime: {Runtime} | Genre: {Genre} | Released:{" "}
             {Released} | Language: {Language}
           </Paper>
         </Grid>
         <Grid item xs={7}>
-          <Paper
-            style={{ fontSize: "22px", fontWeight: "bold" }}
-            
-          >
+          <Paper style={{ fontSize: "22px", fontWeight: "bold" }}>
             Director: {Director} | Writer(s): {Writer} | Cast: {Actors}
           </Paper>
           <br />
           <Paper
             style={{ color: "#000000", fontSize: "22px", fontWeight: "bolder" }}
-            
           >
             Plot: {Plot}
           </Paper>
           <br />
-          <Paper >
+          <Paper>
             Country: {Country} | Awards: {Awards} | imdbRating: {imdbRating} |
             Box Office: {BoxOffice}
           </Paper>
           <br />
           <IconButton onClick={likeMovieHelper}>
-            <ThumbUpOutlinedIcon />
+            {props.userMovies.includes(movieObject) ?  <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }
           </IconButton>
           <IconButton>
             <ThumbDownAltOutlinedIcon onClick={dislikeMovieHelper} />
           </IconButton>
         </Grid>
       </Grid>
+      
     </div>
   );
 }
@@ -251,5 +243,6 @@ MoviePage.defaultProps = {
     imdbRating: "Loading...",
     imdbID: "Loading...",
     BoxOffice: "Loading..."
-  }
+  },
+  userMovies: []
 };

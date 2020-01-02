@@ -23,7 +23,7 @@ import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    backgroundColor:'#ffeae8',
+    backgroundColor:'#F7FCFF',
     maxWidth: 500,
   },
   media: {

@@ -26,7 +26,7 @@ export class RecRow extends Component {
             const check = []
             if(!this.props.likedMovies.includes(movie) && !check.includes(movie) ){
             check.push(movie)
-            return <Link to={`/recommendations/${movie.imdbID}`}><img  src={movie.poster==='N/A'?popeye:movie.poster}   /></Link>}
+            return <><Link to={`/recommendations/${movie.imdbID}`}><img  src={movie.poster==='N/A'?popeye:movie.poster}   /><h3 style={{textAlign:'center'}}>{movie.title} ({movie.year})</h3></Link></>}
             
         
     })
@@ -37,7 +37,7 @@ export class RecRow extends Component {
     render() {
         
         return (
-            <div>
+            <div style={{backgroundColor: '#EDF9FF'}}>
                 <h1 style={{textAlign: 'center'}}>Recommendations based on your activity</h1>
                  <Carousel
                 infinite

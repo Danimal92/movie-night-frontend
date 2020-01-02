@@ -11,6 +11,7 @@ import Signin from "./auth/Signin";
 import MyMovies from "./components/MyMovies";
 import MoviePage from "./components/MoviePage";
 import _ from "lodash";
+import NavigationBar from './components/Navbar';
 
 export class App extends React.Component {
   state = {
@@ -41,6 +42,7 @@ export class App extends React.Component {
     
   };
 
+  
   // createMovieRoutes = () =>
   //   this.state.movies.map(movie => (
   //     <Route
@@ -58,7 +60,14 @@ export class App extends React.Component {
   //     />
   //   ));
 
+  logout = () => {
+    localStorage.clear()
+    this.setState({loggedIn : false, recommendations:[]})
+
+  }
+
   componentDidMount = () => {
+    
     // this.getLikedMovies();
     // this.setRecommendations()
   };
@@ -298,6 +307,7 @@ console.log("This is inside the local storage", localStorage)
       <div>
         
         <Router>
+          
           {this.checkLoggedIn()}
           {console.log("movies from state: ", this.state.movies)}
 
@@ -309,6 +319,7 @@ console.log("This is inside the local storage", localStorage)
               />
             )}
           /> 
+          {this.state.loggedIn ? <div style={{backgroundColor:'E27D60'}}><NavigationBar user={this.state.user} logout={this.logout}/></div> : '' }
           <Route
             exact
             path="/"
@@ -338,6 +349,7 @@ console.log("This is inside the local storage", localStorage)
           {/* {this.createRecRoutes()} */}
           {this.state.search ? this.createRoute() : ""}
           <Route
+          exact
             path="/search/:imdbId"
             render={props => (
               <MoviePage
@@ -362,6 +374,7 @@ console.log("This is inside the local storage", localStorage)
         path={`/recommendations/:imdbId`}
         render={props => (
           <MoviePage
+            userMovies={this.state.movies}
             likeMovie={this.likeMovie}
             dislikeMovie={this.dislikeMovie}
             {...props}

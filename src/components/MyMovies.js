@@ -6,9 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import { lightBlue } from '@material-ui/core/colors';
-import SearchBar from './SearchBar'
 import 'typeface-roboto'
 import Typography from '@material-ui/core/Typography';
+import MovieSearch from './MovieSearch'
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -43,7 +44,7 @@ export class MyMovies extends Component {
             
             <div>
                 
-                <SearchBar createSearchRoute={this.props.createSearchRoute} className={useStyles.root} /><br/>
+                
                 <Grid container spacing={2}>
                 
                 {this.createMovieLinks()}
