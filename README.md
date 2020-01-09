@@ -1,6 +1,6 @@
 
 
-## Movie Night (Front end portion
+## Movie Night 
 
 A recommender system for movies with login, registration, and like/dislike functionality. Users will be brought recommendations based on other profiles. 
 
