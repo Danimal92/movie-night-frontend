@@ -4,14 +4,34 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Image from "material-ui-image";
 import Typography from "@material-ui/core/Typography";
-import Harold from "/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/harold.jpg";
+import Harold from "../harold.jpg";
 import ThumbDownAltOutlinedIcon from "@material-ui/icons/ThumbDownAltOutlined";
 import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";
-import Fab from "@material-ui/core/Fab";
+// import Fab from "@material-ui/core/Fab";
 import "typeface-roboto";
 import IconButton from "@material-ui/core/IconButton";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+
+const INITIAL_MOVIE = {
+  Title: "Loading...",
+  Year: "Loading...",
+  Rated: "Loading...",
+  Released: "Loading...",
+  Runtime: "Loading...",
+  Genre: "Loading...",
+  Director: "Loading...",
+  Writer: "Loading...",
+  Actors: "Loading...",
+  Plot: "Loading...",
+  Language: "Loading...",
+  Country: "Loading...",
+  Awards: "Loading...",
+  Poster: "Loading...",
+  imdbRating: "Loading...",
+  imdbID: "Loading...",
+  BoxOffice: "Loading..."
+};
 
 // const useStyles = makeStyles(theme => ({
 //   root: {
@@ -30,21 +50,28 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 export function MoviePage(props) {
   // const classes = useStyles();
 
-  const [displayMovie, updateDisplayMovie] = useState(0);
+  const [displayMovie, updateDisplayMovie] = useState(INITIAL_MOVIE);
   const [fetchAgain, stopFetch] = useState(true);
+  const [likebutton, liked] = useState(false);
+  const [dislikebutton, disliked] = useState(false);
 
   useEffect(() => {
     console.log('loaded', fetchAgain)
     return stopFetch(!fetchAgain)
   }, [])
 
-  if (props.movie.Title === "Loading..." && fetchAgain) {
+  useEffect(() => {
+    console.log('movie changed', props.movie.Title);
+}, [props.movie.Title])
+
+  if (displayMovie.imdbID === "Loading..." || displayMovie.imdbID != props.match.params.imdbId ) {
+    console.log(props.movie.imdbID, displayMovie.imdbID)
     fetch(
       `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}&plot=full`
     )
       .then(data => data.json())
       .then(data => {
-        makeMovie(displayMovie);
+        
         console.log(data);
         updateDisplayMovie(data);
         stopFetch(false);
@@ -52,9 +79,8 @@ export function MoviePage(props) {
   }
 
   const makeMovie = movie => {
-    console.log("LOCAL STORAGE TOKEN", localStorage.getItem("token"));
 
-    fetch(`http://localhost:3000/movies`, {
+    return fetch(`http://localhost:3000/movies`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
@@ -127,8 +153,9 @@ export function MoviePage(props) {
   
 
   const likeMovieHelper = () => {
-    makeMovie(displayMovie);
-    fetch(`http://localhost:3000/find_by_imdbID`, {
+    makeMovie(displayMovie)
+    .then(() => {
+      fetch(`http://localhost:3000/find_by_imdbID`, {
       method: "POST",
       headers: {
         "Content-Type": "Application/json",
@@ -141,10 +168,14 @@ export function MoviePage(props) {
     })
       .then(data => data.json())
       .then(movie => (
+        console.log('MOVIEEEWEEEEEEEEEEEEEEEEEEEE', movie),
         props.likeMovie(movie),
         movieObject = movie
       ));
-  };
+      liked(true)
+      disliked(false)
+  })
+};
 
   const dislikeMovieHelper = () => {
     fetch(`http://localhost:3000/find_by_imdbID`, {
@@ -160,7 +191,11 @@ export function MoviePage(props) {
     })
       .then(data => data.json())
       .then(movie => props.dislikeMovie(movie));
+      liked(false)
+      disliked(true)
   };
+
+console.log("PROPS", props)
 
   return (
     <div>
@@ -211,10 +246,10 @@ export function MoviePage(props) {
           </Paper>
           <br />
           <IconButton onClick={likeMovieHelper}>
-            {props.userMovies.includes(movieObject) ?  <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }
+            {likebutton  ?  <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }
           </IconButton>
-          <IconButton>
-            <ThumbDownAltOutlinedIcon onClick={dislikeMovieHelper} />
+          <IconButton onClick={dislikeMovieHelper}>
+          {dislikebutton  ?  <ThumbDownIcon /> : <ThumbDownAltOutlinedIcon /> }
           </IconButton>
         </Grid>
       </Grid>

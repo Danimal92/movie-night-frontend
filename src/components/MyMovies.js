@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
-import MoviePage from './MoviePage'
-import {Link,NavLink} from 'react-router-dom'
+// import MoviePage from './MoviePage'
+// import {Link,NavLink} from 'react-router-dom'
 import MovieCard from './MovieCard'
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import { lightBlue } from '@material-ui/core/colors';
+// import { lightBlue } from '@material-ui/core/colors';
 import 'typeface-roboto'
-import Typography from '@material-ui/core/Typography';
-import MovieSearch from './MovieSearch'
+// import Typography from '@material-ui/core/Typography';
+// import MovieSearch from './MovieSearch'
 
 
 

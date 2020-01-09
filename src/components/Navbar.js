@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Menu } from "semantic-ui-react";
+import {  Menu } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
 import MovieSearch from "./MovieSearch";
 
@@ -47,9 +47,11 @@ export class NavigationBar extends Component {
 
         <Menu.Item>
             <MovieSearch />
-            <Menu.Item color='blue' name={`Welcome, ${this.props.user.username}!`}  />
+            <Menu.Item  color='blue' name={`Welcome, ${this.props.user.username}!`}  />
         </Menu.Item>
-
+        
+        
+        
         </Menu.Menu>
         <Menu.Menu position="right">
           

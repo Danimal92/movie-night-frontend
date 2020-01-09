@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import MoviePage from './MoviePage'
+// import MoviePage from './MoviePage'
 import Carousel, { Dots } from '@brainhubeu/react-carousel';
-import Harold from '/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/harold.jpg'
+import Harold from '../harold.jpg'
 import '@brainhubeu/react-carousel/lib/style.css';
 import Image from 'material-ui-image';
 import {BrowserRouter as Router,Route, Redirect,Link} from 'react-router-dom'
-import popeye from '/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/popeye.jpg'
+import popeye from '../popeye.jpg'
 
 export class RecRow extends Component {
 

@@ -7,23 +7,23 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
+// import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+// import FavoriteIcon from '@material-ui/icons/Favorite';
+// import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import {Link,NavLink} from 'react-router-dom'
-import noImage from '/Users/flatironschool/Desktop/movie-night/movie-night-frontend/src/harold.jpg'
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
+import {Link} from 'react-router-dom'
+import noImage from '../harold.jpg'
 import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownIcon from '@material-ui/icons/ThumbDown';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    backgroundColor:'#F7FCFF',
+    backgroundColor:'#E4FCFF',
     maxWidth: 500,
   },
   media: {

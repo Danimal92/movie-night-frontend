@@ -114,7 +114,7 @@ export class App extends React.Component {
   likeMovie = movie => {
     
    
-    
+    console.log('movie')
     fetch(`http://localhost:3000/usermovies`, {
       method: "POST",
       headers: {
@@ -308,6 +308,7 @@ console.log("This is inside the local storage", localStorage)
         
         <Router>
           
+          
           {this.checkLoggedIn()}
           {console.log("movies from state: ", this.state.movies)}
 
@@ -380,6 +381,20 @@ console.log("This is inside the local storage", localStorage)
             {...props}
           />
         )}
+        
+      />
+          <Route
+        exact
+        path={`/movies/:imdbId`}
+        render={props => (
+          <MoviePage
+            userMovies={this.state.movies}
+            likeMovie={this.likeMovie}
+            dislikeMovie={this.dislikeMovie}
+            {...props}
+          />
+        )}
+        
       />
 
 

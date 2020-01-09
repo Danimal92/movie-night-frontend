@@ -69,8 +69,8 @@
 
 import React from "react";
 import { throttle, debounce } from "throttle-debounce";
-import { Link, Redirect } from "react-router-dom";
-import { Input, Search } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
+import {  Search } from "semantic-ui-react";
 
 const API_URL = "http://www.omdbapi.com/?apikey=b345e258&";
 
@@ -165,7 +165,7 @@ export class MovieSearch extends React.Component {
           </button>
         ) : null} */}
 
-        <Search resultRenderer={this.renderResults} value={this.state.q} onSearchChange={this.changeQuery} onResultSelect={this.handleRedirect} results={this.state.results} style={{ listStyleType: "none" }}/>
+        <Search placeholder={'Search for movies...'} resultRenderer={this.renderResults} value={this.state.q} onSearchChange={this.changeQuery} onResultSelect={this.handleRedirect} results={this.state.results} style={{ listStyleType: "none" }}/>
           
         
       </div>
