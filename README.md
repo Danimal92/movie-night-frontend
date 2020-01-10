@@ -16,9 +16,11 @@ A recommender system for movies with login, registration, and like/dislike funct
 
 - Clone down *movie-night-frontend* and *movie-night-backend* from their respective repository
 - Open the terminal and cd into the backend folder
+- Bundle install with *bundle install*
 - Open rails server with *rails s* command
 - Make sure the local host server is running on port 3000
 - cd into the frontend folder
+- Install npm packages with *npm install*
 - Start node.js server with *npm start* command
 - Open browser and type in *http://localhost:3001/*
 - Register a user and use the search bar to like movies, use the Movies tab to see the movies you've liked, and the home tab to see what recommendations you have been given
