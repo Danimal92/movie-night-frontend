@@ -31,4 +31,3 @@ A recommender system for movies with login, registration, and like/dislike funct
 
 
 
-asdfasdfSDFsdfSDFSDfSDFSDFSDfSDFdsfgsdfgads/lfmgkna;dfgjn
