@@ -56,30 +56,26 @@ export function MoviePage(props) {
   const [dislikebutton, disliked] = useState(false);
 
   useEffect(() => {
-    console.log('loaded', fetchAgain)
-    return stopFetch(!fetchAgain)
-  }, [])
+    return stopFetch(!fetchAgain);
+  }, []);
 
-  useEffect(() => {
-    console.log('movie changed', props.movie.Title);
-}, [props.movie.Title])
+  useEffect(() => {}, [props.movie.Title]);
 
-  if (displayMovie.imdbID === "Loading..." || displayMovie.imdbID != props.match.params.imdbId ) {
-    console.log(props.movie.imdbID, displayMovie.imdbID)
+  if (
+    displayMovie.imdbID === "Loading..." ||
+    displayMovie.imdbID != props.match.params.imdbId
+  ) {
     fetch(
       `http://www.omdbapi.com/?apikey=b345e258&i=${props.match.params.imdbId}&plot=full`
     )
       .then(data => data.json())
       .then(data => {
-        
-        console.log(data);
         updateDisplayMovie(data);
         stopFetch(false);
       });
   }
 
   const makeMovie = movie => {
-
     return fetch(`http://localhost:3000/movies`, {
       method: "POST",
       headers: {
@@ -108,8 +104,6 @@ export function MoviePage(props) {
       })
     });
   };
-
-  console.log("!!!!!!!", displayMovie);
 
   let {
     Title,
@@ -149,33 +143,27 @@ export function MoviePage(props) {
   //   // .then(movie => movie)
   // }
 
-  let movieObject = {}
-  
+  let movieObject = {};
 
   const likeMovieHelper = () => {
-    makeMovie(displayMovie)
-    .then(() => {
+    makeMovie(displayMovie).then(() => {
       fetch(`http://localhost:3000/find_by_imdbID`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "Application/json",
-        Accept: "Application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify({
-        imdbID: displayMovie.imdbID
+        method: "POST",
+        headers: {
+          "Content-Type": "Application/json",
+          Accept: "Application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`
+        },
+        body: JSON.stringify({
+          imdbID: displayMovie.imdbID
+        })
       })
-    })
-      .then(data => data.json())
-      .then(movie => (
-        console.log('MOVIEEEWEEEEEEEEEEEEEEEEEEEE', movie),
-        props.likeMovie(movie),
-        movieObject = movie
-      ));
-      liked(true)
-      disliked(false)
-  })
-};
+        .then(data => data.json())
+        .then(movie => (props.likeMovie(movie), (movieObject = movie)));
+      liked(true);
+      disliked(false);
+    });
+  };
 
   const dislikeMovieHelper = () => {
     fetch(`http://localhost:3000/find_by_imdbID`, {
@@ -191,16 +179,12 @@ export function MoviePage(props) {
     })
       .then(data => data.json())
       .then(movie => props.dislikeMovie(movie));
-      liked(false)
-      disliked(true)
+    liked(false);
+    disliked(true);
   };
-
-console.log("PROPS", props)
 
   return (
     <div>
-      
-
       <Grid container spacing={0}>
         <Grid style={{ color: "#a84a32" }} item xs={12}></Grid>
       </Grid>
@@ -246,14 +230,13 @@ console.log("PROPS", props)
           </Paper>
           <br />
           <IconButton onClick={likeMovieHelper}>
-            {likebutton  ?  <ThumbUpIcon /> : <ThumbUpOutlinedIcon /> }
+            {likebutton ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
           </IconButton>
           <IconButton onClick={dislikeMovieHelper}>
-          {dislikebutton  ?  <ThumbDownIcon /> : <ThumbDownAltOutlinedIcon /> }
+            {dislikebutton ? <ThumbDownIcon /> : <ThumbDownAltOutlinedIcon />}
           </IconButton>
         </Grid>
       </Grid>
-      
     </div>
   );
 }

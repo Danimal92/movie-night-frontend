@@ -70,20 +70,19 @@
 import React from "react";
 import { throttle, debounce } from "throttle-debounce";
 import { Redirect } from "react-router-dom";
-import {  Search } from "semantic-ui-react";
+import { Search } from "semantic-ui-react";
 
 const API_URL = "http://www.omdbapi.com/?apikey=b345e258&";
 
 export class MovieSearch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { q: "", results: [], imdbID: '' };
+    this.state = { q: "", results: [], imdbID: "" };
     this.autocompleteSearchDebounced = debounce(500, this.autocompleteSearch);
     this.autocompleteSearchThrottled = throttle(500, this.autocompleteSearch);
   }
 
-  changeQuery = (event) => {
-    console.log('HITTING CHANGE QUERY', event)
+  changeQuery = event => {
     this.setState({ q: event.target.value }, () => {
       const q = this.state.q;
       if (q.length < 5) {
@@ -121,26 +120,23 @@ export class MovieSearch extends React.Component {
   };
 
   handleRedirect = (e, data) => {
-    // console.log('HITTING HANDLE REDIRECT', data)
-    this.setState({imdbID: data.result.imdbID})
-  }
+    //
+    this.setState({ imdbID: data.result.imdbID });
+  };
 
-  renderResults = (e) => {
-    // console.log('HITTING RENDER RESULTS', e)
-    return( `${e.Title} (${e.Year})` )
-  
-  }
+  renderResults = e => {
+    //
+    return `${e.Title} (${e.Year})`;
+  };
 
   checkPath = () => {
-    console.log('checkPath', this.state.imdbID.length)
-    if(this.state.imdbID !== ''){
-      let id = this.state.imdbID
-      console.log('sup', id)
-      this.setState({imdbID:''})
-    return <Redirect to={`/search/${id}`} />}
+    if (this.state.imdbID !== "") {
+      let id = this.state.imdbID;
 
-  }
-
+      this.setState({ imdbID: "" });
+      return <Redirect to={`/search/${id}`} />;
+    }
+  };
 
   render() {
     const _searches = this.state._searches || [];
@@ -148,14 +144,14 @@ export class MovieSearch extends React.Component {
     return (
       <div>
         {this.checkPath()}
-        
+
         {/* <Input
           placeholder="Type something here"
           type="text"
           value={this.state.q}
           onChange={this.changeQuery}
         /> */}
-        
+
         {/* {_searches.length ? (
           <button
             type="button"
@@ -165,9 +161,15 @@ export class MovieSearch extends React.Component {
           </button>
         ) : null} */}
 
-        <Search placeholder={'Search for movies...'} resultRenderer={this.renderResults} value={this.state.q} onSearchChange={this.changeQuery} onResultSelect={this.handleRedirect} results={this.state.results} style={{ listStyleType: "none" }}/>
-          
-        
+        <Search
+          placeholder={"Search for movies..."}
+          resultRenderer={this.renderResults}
+          value={this.state.q}
+          onSearchChange={this.changeQuery}
+          onResultSelect={this.handleRedirect}
+          results={this.state.results}
+          style={{ listStyleType: "none" }}
+        />
       </div>
     );
   }
